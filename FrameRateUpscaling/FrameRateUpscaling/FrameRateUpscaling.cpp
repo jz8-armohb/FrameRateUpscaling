@@ -8,6 +8,7 @@ void GetSAD(byte* prevY, byte* currY, int x, int y, int& best_dx, int& best_dy) 
 	int SAD_min = 10000;
 	best_dx = 100;
 	best_dy = 100;
+	int SAD_thresh = 20;
 
 	for (int dx_temp = -15; dx_temp < 16; dx_temp++) {
 		for (int dy_temp = -15; dy_temp < 16; dy_temp++) {
@@ -43,8 +44,13 @@ void GetSAD(byte* prevY, byte* currY, int x, int y, int& best_dx, int& best_dy) 
 			if ((SAD_temp < SAD_min) && (overflowFlag == 0)) {
 				/* Update if a smaller SAD is found and no overflow occured */
 				SAD_min = SAD_temp;
-				best_dx = dx_temp;
-				best_dy = dy_temp;
+				if (SAD_min > SAD_thresh) {
+					best_dx = 0;
+					best_dy = 0;
+				} else {
+					best_dx = dx_temp;
+					best_dy = dy_temp;
+				}
 			}
 		}
 	}
